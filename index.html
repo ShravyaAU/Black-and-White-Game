@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="GRA 121 Design Principles I - 10-Question Black on White / White on Black Perception Challenge" />
+  <title>GRA 121 — 10-Question Perception Game</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ASU Header -->
+  <header class="asu-header">
+    <div class="header-inner">
+      <div class="asu-brand">
+        <div class="asu-logo-badge">ASU</div>
+        <div>
+          <h1 class="asu-title">GRA 121 — Design Principles I</h1>
+          <p class="asu-subtitle">Black on White / White on Black 10-Question Challenge</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Start Modal: Student Name Input -->
+  <div id="startModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Welcome to GRA 121</h2>
+        <p class="modal-subtitle">10-Question Optical Illusion & Value Perception Challenge</p>
+      </div>
+
+      <form id="startForm" onsubmit="event.preventDefault(); startGame();">
+        <div class="form-group">
+          <label for="studentNameInput" class="form-label">Enter Student Full Name:</label>
+          <input 
+            type="text" 
+            id="studentNameInput" 
+            class="form-input" 
+            placeholder="e.g., Alex Sun" 
+            required 
+            autofocus 
+          />
+        </div>
+
+        <button type="submit" class="btn-asu btn-gold btn-lg">
+          Start 10-Question Exercise
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Game Content -->
+  <main class="main-wrapper">
+    <div class="asu-card">
+
+      <!-- Student & Score Header Bar -->
+      <div class="info-bar">
+        <div class="info-pill">
+          <span>Student:</span>
+          <span id="displayStudentName" class="info-highlight">Guest Student</span>
+        </div>
+        <div class="info-pill">
+          <span>Progress:</span>
+          <span id="progressText" class="info-highlight">Question 1 of 10</span>
+        </div>
+        <div class="info-pill">
+          <span>Total Score:</span>
+          <span id="displayTotalScore" class="info-highlight">0 / 100 pts</span>
+        </div>
+        <div class="info-pill">
+          <span>Attempt:</span>
+          <span id="attemptDisplay" class="info-highlight">1 of 2</span>
+        </div>
+      </div>
+
+      <!-- Progress Track -->
+      <div class="progress-track">
+        <div id="progressBarFill" class="progress-fill"></div>
+      </div>
+
+      <!-- Question Header -->
+      <div class="question-header-bar">
+        <h2 class="question-title" id="questionTitle">Question 1 of 10</h2>
+        <span class="question-badge" id="questionBadge">Round 1</span>
+      </div>
+
+      <p class="stage-instructions" id="questionInstructions">
+        <strong>Exercise Instructions:</strong> Light shapes on dark backgrounds often appear larger than dark shapes on light backgrounds (irradiation illusion). 
+        <strong>Click and drag the corner handle</strong> of the White Square on the right until both center squares appear <em>visually equal</em> in size.
+      </p>
+
+      <!-- Drag & Drop Perception Stage -->
+      <div class="perception-stage" id="perceptionStage">
+        
+        <!-- Left Panel: Fixed Black Square on White Background -->
+        <div class="stage-panel panel-white" id="panelA">
+          <div class="panel-title" id="panelTitleA">Black Square on White</div>
+          <div class="square-container">
+            <div class="target-square square-black" id="fixedSquare" aria-label="Reference black square"></div>
+          </div>
+          <div class="drag-instruction-hint" id="fixedTag">Reference Square</div>
+        </div>
+
+        <!-- Right Panel: Drag to Resize White Square on Black Background -->
+        <div class="stage-panel panel-black" id="panelB">
+          <div class="panel-title" id="panelTitleB">White Square on Black</div>
+          <div class="square-container">
+            <div class="target-square square-white" id="adjustableSquare" style="width: 145px; height: 145px;" aria-label="Drag corner to adjust white square size">
+              <div class="drag-handle" id="dragHandle" title="Drag corner to resize">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14 6V14H6" stroke="#111111" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M14 14L8 8" stroke="#111111" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="drag-instruction-hint" id="sizeTag">Adjustable Square</div>
+        </div>
+
+      </div>
+
+      <!-- Round Feedback Banner (Hidden until submission) -->
+      <div class="round-feedback-card hidden" id="roundFeedbackCard">
+        <div class="round-feedback-title" id="roundFeedbackTitle">Question 1 Result: 9 / 10 pts</div>
+        <p id="roundFeedbackDetail" style="font-size: 0.95rem; color: #333333; margin-top: 0.25rem;">
+          Optical principle breakdown...
+        </p>
+      </div>
+
+      <!-- Stage Actions -->
+      <div style="margin-top: 1.5rem; text-align: center;">
+        <button type="button" class="btn-asu btn-gold btn-lg" id="btnSubmitSize">
+          Submit
+        </button>
+        <button type="button" class="btn-asu btn-black btn-lg hidden" id="btnNextQuestion">
+          Next Question ➔
+        </button>
+      </div>
+
+      <!-- Reflection Section (Appears after Round 10) -->
+      <div class="reflection-box hidden" id="reflectionSection">
+        <h3 class="reflection-title">Reflection for Credit (10 Points)</h3>
+        <p style="font-size: 0.95rem; color: #444;">
+          Congratulations on completing all 10 perception questions! Write a short paragraph (3–5 sentences) answering:
+        </p>
+        <ul style="margin-left: 1.25rem; font-size: 0.9rem; color: #555; margin-top: 0.35rem;">
+          <li>Which reference square sizes made optical size difference most noticeable?</li>
+          <li>What did you adjust to make the squares feel visually balanced across the 10 questions?</li>
+          <li>What does this tell you about how black and white affect perception in design?</li>
+        </ul>
+
+        <textarea 
+          id="reflectionInput" 
+          class="reflection-textarea" 
+          rows="4" 
+          placeholder="Type your 3-5 sentence reflection response here..."
+        ></textarea>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+          <span id="sentenceCounter" style="font-size: 0.85rem; color: #666;">0 sentences</span>
+          <button type="button" class="btn-asu btn-black" id="btnSubmitFinal">
+            Submit
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Scorecard Popup Modal -->
+  <div id="scorecardModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>ASU Student Scorecard</h2>
+        <p class="modal-subtitle">GRA 121 — Design Principles I (10-Question Perception Test)</p>
+      </div>
+
+      <div class="scorecard-details">
+        <div class="scorecard-row">
+          <span class="label">Student Name:</span>
+          <span class="val" id="scStudentName">Alex Sun</span>
+        </div>
+        <div class="scorecard-row">
+          <span class="label">Attempt:</span>
+          <span class="val" id="scAttempt">1 of 2</span>
+        </div>
+        <div class="scorecard-row">
+          <span class="label">10-Question Perception Score:</span>
+          <span class="val" id="scSizeScore">88 / 100 pts</span>
+        </div>
+        <div class="scorecard-row">
+          <span class="label">Reflection Paragraph Score:</span>
+          <span class="val" id="scReflectionScore">10 / 10 pts</span>
+        </div>
+        <div class="scorecard-row total-row">
+          <span class="label">Final Total Grade:</span>
+          <span class="val" id="scTotalScore">98 / 110 pts (89%)</span>
+        </div>
+
+        <div style="margin-top: 1rem;">
+          <h4 style="color: var(--asu-gold); font-family: var(--font-heading); margin-bottom: 0.5rem;">10-Question Size Breakdown</h4>
+          <table class="breakdown-table">
+            <thead>
+              <tr>
+                <th>Q#</th>
+                <th>Reference Size</th>
+                <th>Your Size</th>
+                <th>Target</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody id="scBreakdownBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="scFeedbackMsg" style="font-size: 0.9rem; background: #f8f9fa; border-left: 4px solid var(--asu-gold); padding: 0.85rem; margin-bottom: 1.25rem; border-radius: 4px;">
+        <!-- Dynamic Reflection Feedback -->
+      </div>
+
+      <div style="display: flex; gap: 1rem;">
+        <button type="button" class="btn-asu btn-black" onclick="window.print();" style="flex: 1;">
+          Print Scorecard
+        </button>
+        <button type="button" class="btn-asu btn-gold" id="btnPlayAgain" style="flex: 1;">
+          Try Attempt 2
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
